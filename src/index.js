@@ -1,5 +1,6 @@
 const express = require('express');
 const talkerRoute = require('./routes/talkerRoute');
+const talkerRouteDB = require('./routes/talkerRouteDB');
 
 const app = express();
 app.use(express.json());
@@ -12,5 +13,6 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/talker', talkerRoute);
+app.use('/talker/db', talkerRouteDB);
 
 module.exports = app;
