@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const dotenv = require('dotenv');
-const getTalkersFromDB = require('../utils/getTalkerFromDB');
+const getTalkersFromDB = require('../utils/db/getTalkerFromDB');
 
 dotenv.config();
 
