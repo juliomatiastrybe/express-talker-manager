@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const dotenv = require('dotenv');
 const getTalkersJson = require('../utils/getTalkerJson');
-// const createTalkerId = require('../utils/createTalkerId');
+const createTalkerId = require('../utils/createTalkerId');
+const putTalkerJson = require('../utils/putTalkerJson');
 
 dotenv.config();
 
@@ -33,25 +34,29 @@ const getTalkerById = async (req, res) => {
 //   }
 // }
 
-// const createTalker = async (req, res) => {
-//   const { name, age, talk } = req.body;
-//   const talkers = await getTalkersJson();
-//   const verifyTalker = talkers.some((talker) => talker.name === name);
+const createTalker = async (req, res) => {
+  const { name, age, talk } = req.body;
+  const talkers = await getTalkersJson();
+  const verifyTalker = talkers.some((talker) => talker.name === name);
 
-//   if (verifyTalker) return res.status(409).json({ message: 'Pessoa palestrante já cadastrada' });
-//   const talkerId = createTalkerId(talkers);
+  if (verifyTalker) return res.status(409).json({ message: 'Pessoa palestrante já cadastrada' });
 
-//   const newTalker = {
-//     id: talkerId,
-//     name,
-//     age,
-//     talk,
-//   };
+  const talkerId = createTalkerId(talkers);
 
-//   talkers.push(newTalker);
-// };
+  const newTalker = {
+    id: talkerId,
+    name,
+    age,
+    talk,
+  };
+
+  talkers.push(newTalker);
+  await putTalkerJson(talkers);
+  res.status(201).json(newTalker);
+};
 
 talkerRoute.get('/', getTalkers);
 talkerRoute.get('/:id', getTalkerById);
+talkerRoute.post('/', createTalker);
 
 module.exports = talkerRoute;
