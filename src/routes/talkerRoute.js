@@ -26,7 +26,7 @@ const getTalkers = async (_req, res) => {
   // const talkersDB = await getTalkersFromDB();
   // console.log('talkersDB:', talkersDB);
 
-  if (!talkers) return res.status(200).json([]);
+  if (Array.isArray(talkers) && talkers.length === 0) return res.status(200).json([]);
 
   res.status(200).json(talkers);
 };
