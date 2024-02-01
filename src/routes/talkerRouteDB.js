@@ -1,26 +1,10 @@
 const { Router } = require('express');
 const dotenv = require('dotenv');
-const connection = require('../db/connection');
+const getTalkersFromDB = require('../utils/getTalkerFromDB');
 
 dotenv.config();
 
 const talkerRouteDB = Router();
-
-// conexão com o banco de dados através do arquivo connection.js
-const getTalkersFromDB = async () => {
-  const [talkers] = await connection
-    .execute(`
-      SELECT 
-        name,
-        age,
-        id,
-        JSON_OBJECT(
-          'watchedAt', talk_watched_at,
-          'rate', talk_rate
-        ) AS talk
-      FROM talkers;`);
-  return talkers;
-};
 
 const getTalkersDB = async (_req, res) => {
   const talkersDB = await getTalkersFromDB();

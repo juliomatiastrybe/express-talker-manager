@@ -1,18 +1,10 @@
 const { Router } = require('express');
-const fs = require('fs').promises;
-const path = require('path');
 const dotenv = require('dotenv');
+const getTalkersJson = require('../utils/getTalkerJson');
 
 dotenv.config();
 
 const talkerRoute = Router();
-
-const getTalkersJson = async () => {
-  const talkers = JSON.parse(
-    await fs.readFile(path.resolve(__dirname, '../talker.json'), 'utf-8'),
-  );
-  return talkers;
-};
 
 const getTalkers = async (_req, res) => {
   const talkers = await getTalkersJson();
