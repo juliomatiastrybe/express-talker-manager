@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const dotenv = require('dotenv');
 const createToken = require('../utils/createToken');
+const validateLogin = require('../middlewares/validateLogin');
 
 dotenv.config();
 
@@ -15,6 +16,6 @@ const postTokenLogin = (_req, res) => {
   res.status(200).json({ token });
 };
 
-loginRoute.post('/', postTokenLogin);
+loginRoute.post('/', validateLogin, postTokenLogin);
 
 module.exports = loginRoute;
