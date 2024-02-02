@@ -1,5 +1,5 @@
 const validateData = require('../utils/validateData');
-const getTalkersJson = require('../utils/getTalkerJson');
+// const getTalkersJson = require('../utils/getTalkerJson');
 
 const validateToken = (req, res, next) => {
   const token = req.headers.authorization;
@@ -83,24 +83,15 @@ const validateRateParam = (req, res, next) => {
   next();
 };
 
-const validateDataParam = (req, res, next) => {
-  const { data } = req.query;
-  if (!data) {
+const validateDateParam = (req, res, next) => {
+  const { date } = req.query;
+  if (!date) {
     return next();
   }
-  const isValid = validateData(data);
+  const isValid = validateData(date);
+  
   if (!isValid) {
     return res.status(400).json({ message: 'O parâmetro "date" deve ter o formato "dd/mm/aaaa"' });
-  }
-  next();
-};
-
-const validateQParam = async (req, res, next) => {
-  const { q } = req.query;
-
-  const talkers = await getTalkersJson();
-  if (!q) {
-    return res.status(200).json(talkers);
   }
   next();
 };
@@ -113,5 +104,4 @@ module.exports = {
   validateWatchedAt,
   validateRate,
   validateRateParam,
-  validateDataParam,
-  validateQParam };
+  validateDateParam };

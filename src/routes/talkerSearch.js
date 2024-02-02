@@ -1,21 +1,12 @@
 const { Router } = require('express');
 const dotenv = require('dotenv');
 const getTalkersJson = require('../utils/getTalkerJson');
-const { validateToken, validateRateParam } = require('../middlewares/validateTalker');
+const { validateToken, 
+  validateRateParam, validateDateParam } = require('../middlewares/validateTalker');
 
 dotenv.config();
 
 const talkerSearchRoute = Router();
-
-// {
-//   "name": "Henrique Albuquerque",
-//   "age": 62,
-//   "id": 1,
-//   "talk": {
-//     "watchedAt": "22/10/2020",
-//     "rate": 5
-//   }
-// }
 
 const searchTalker = async (req, res) => {
   const { q, rate, date } = req.query;
@@ -36,6 +27,6 @@ const searchTalker = async (req, res) => {
   res.status(200).json(filteredTalkers);
 };
 
-talkerSearchRoute.get('/', validateToken, validateRateParam, searchTalker);
+talkerSearchRoute.get('/', validateToken, validateRateParam, validateDateParam, searchTalker);
 
 module.exports = talkerSearchRoute;
