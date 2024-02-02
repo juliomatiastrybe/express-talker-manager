@@ -67,6 +67,20 @@ const updateTalker = async (req, res) => {
   res.status(200).json(talkers[talkerIndex]);
 };
 
+const deleteTalker = async (req, res) => {
+  const { id } = req.params;
+  const talkers = await getTalkersJson();
+  const talkerIndex = talkers.findIndex((t) => t.id === parseInt(id, 10));
+  if (talkerIndex === -1) {
+    return res.status(404)
+      .json({ message: 'Pessoa palestrante não encontrada' }); 
+  }
+
+  talkers.splice(talkerIndex, 1);
+  await putTalkerJson(talkers);
+  res.status(204).end();
+};
+
 talkerRoute.get('/', getTalkers);
 talkerRoute.get('/:id', getTalkerById);
 talkerRoute.post('/', validateToken,
@@ -83,5 +97,6 @@ talkerRoute.put('/:id', validateToken,
   validateWatchedAt,
   validateRate,
   updateTalker);
+talkerRoute.delete('/:id', validateToken, deleteTalker);
 
 module.exports = talkerRoute;
