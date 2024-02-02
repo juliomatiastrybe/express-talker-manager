@@ -4,6 +4,7 @@ const talkerRouteDB = require('./routes/talkerRouteDB');
 const loginRoute = require('./routes/loginRoute');
 const talkerSearchRoute = require('./routes/talkerSearch');
 const talkerRateRoute = require('./routes/talkerRate');
+require('express-async-errors');
 
 const app = express();
 app.use(express.json());
@@ -20,5 +21,9 @@ app.use('/talker/rate', talkerRateRoute);
 app.use('/talker/search', talkerSearchRoute);
 app.use('/talker', talkerRoute);
 app.use('/login', loginRoute);
+
+app.use((err, _req, res, _next) => {
+  res.status(500).json({ message: err.message });
+});
 
 module.exports = app;
