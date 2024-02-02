@@ -1,4 +1,5 @@
 const validateData = require('../utils/validateData');
+const getTalkersJson = require('../utils/getTalkerJson');
 
 const validateToken = (req, res, next) => {
   const token = req.headers.authorization;
@@ -62,9 +63,44 @@ const validateRate = (req, res, next) => {
     return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
   }
   // Verifica se o campo 'rate' é um número inteiro entre 1 e 5
-  if (!Number.isInteger(rate) || rate <= 0 || rate > 5) {
+  if (rate % 1 !== 0 || rate <= 0 || rate > 5) {
     return res.status(400)
       .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+  }
+  next();
+};
+
+const validateRateParam = (req, res, next) => {
+  const { rate } = req.query;
+  if (!rate) {
+    return next();
+  }
+
+  if (rate % 1 !== 0 || rate <= 0 || rate > 5) {
+    return res.status(400)
+      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+  }
+  next();
+};
+
+const validateDataParam = (req, res, next) => {
+  const { data } = req.query;
+  if (!data) {
+    return next();
+  }
+  const isValid = validateData(data);
+  if (!isValid) {
+    return res.status(400).json({ message: 'O parâmetro "date" deve ter o formato "dd/mm/aaaa"' });
+  }
+  next();
+};
+
+const validateQParam = async (req, res, next) => {
+  const { q } = req.query;
+
+  const talkers = await getTalkersJson();
+  if (!q) {
+    return res.status(200).json(talkers);
   }
   next();
 };
@@ -75,4 +111,7 @@ module.exports = {
   validateAge,
   validateTalk,
   validateWatchedAt,
-  validateRate };
+  validateRate,
+  validateRateParam,
+  validateDataParam,
+  validateQParam };

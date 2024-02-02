@@ -7,6 +7,4 @@ const createToken = () => {
   return token;
 };
 
-console.log(createToken());
-
 module.exports = createToken;
