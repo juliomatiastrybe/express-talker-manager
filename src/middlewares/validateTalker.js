@@ -70,6 +70,21 @@ const validateRate = (req, res, next) => {
   next();
 };
 
+const validadeRateUpId = (req, res, next) => {
+  const { rate } = req.body;
+  const isRateNumber = verifyRateNumber(rate);
+  // Verifica se o campo 'rate' é obrigatório
+  if (!isRateNumber) {
+    return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
+  }
+  // Verifica se o campo 'rate' é um número inteiro entre 1 e 5
+  if (rate % 1 !== 0 || rate <= 0 || rate > 5) {
+    return res.status(400)
+      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+  }
+  next();
+};
+
 const validateRateParam = (req, res, next) => {
   const { rate } = req.query;
   if (!rate) {
@@ -104,4 +119,5 @@ module.exports = {
   validateWatchedAt,
   validateRate,
   validateRateParam,
-  validateDateParam };
+  validateDateParam,
+  validadeRateUpId };
