@@ -3,6 +3,13 @@ const dotenv = require('dotenv');
 const getTalkersJson = require('../utils/getTalkerJson');
 const createTalkerId = require('../utils/createTalkerId');
 const putTalkerJson = require('../utils/putTalkerJson');
+const { 
+  validateToken, 
+  validateName, 
+  validateAge, 
+  validateTalk, 
+  validateWatchedAt, 
+  validateRate } = require('../middlewares/validateTalker');
 
 dotenv.config();
 
@@ -23,16 +30,6 @@ const getTalkerById = async (req, res) => {
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   res.status(200).json(talker);
 };
-
-// {
-//   "id": 1,
-//   "name": "Danielle Santos",
-//   "age": 56,
-//   "talk": {
-//     "watchedAt": "22/10/2019",
-//     "rate": 5
-//   }
-// }
 
 const createTalker = async (req, res) => {
   const { name, age, talk } = req.body;
@@ -57,6 +54,12 @@ const createTalker = async (req, res) => {
 
 talkerRoute.get('/', getTalkers);
 talkerRoute.get('/:id', getTalkerById);
-talkerRoute.post('/', createTalker);
+talkerRoute.post('/', validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  createTalker);
 
 module.exports = talkerRoute;
